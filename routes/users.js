@@ -1,6 +1,6 @@
 const usersRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const validator = require('validator');
+const validateEmail = require('../utils/validateEmail');
 
 const {
   getUser,
@@ -10,10 +10,9 @@ const {
 usersRouter.get('/users/me', getUser);
 
 usersRouter.patch('/users/me', celebrate({
-  name: Joi.string().required().min(2).max(30),
-  email: Joi.string().required().custom((value, helpers) => {
-    if (validator.isUrl(value)) return value;
-    return helpers.message('Неверный формат ссылки');
+  body: Joi.object().keys({
+    email: Joi.string().required().custom(validateEmail),
+    name: Joi.string().required().min(2).max(30),
   }),
 }), updateUser);
 

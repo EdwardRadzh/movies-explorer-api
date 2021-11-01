@@ -1,6 +1,6 @@
 const movieRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const validator = require('validator');
+const validateURL = require('../utils/validateUrl');
 
 const {
   getMovies,
@@ -19,18 +19,9 @@ movieRouter.post('/movies', celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().custom((value, helpers) => {
-      if (validator.isUrl(value)) return value;
-      return helpers.message('Неверный формат ссылки');
-    }),
-    trailer: Joi.string().required().custom((value, helpers) => {
-      if (validator.isUrl(value)) return value;
-      return helpers.message('Неверный формат ссылки');
-    }),
-    thumbnail: Joi.string().required().custom((value, helpers) => {
-      if (validator.isUrl(value)) return value;
-      return helpers.message('Неверный формат ссылки');
-    }),
+    image: Joi.string().required().custom(validateURL),
+    trailer: Joi.string().required().custom(validateURL),
+    thumbnail: Joi.string().required().custom(validateURL),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
     movieId: Joi.number().required(),
