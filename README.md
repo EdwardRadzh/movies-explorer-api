@@ -7,3 +7,8 @@
 ## Домен сервера
 
 https://api.movie-radzhabov.nomoredomains.rocks/
+
+## Фронтенд на сервере
+
+https://movie-radzhabov.nomoredomains.rocks/
+
