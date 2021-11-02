@@ -60,7 +60,7 @@ const deleteMovie = (req, res, next) => {
       if (!movie) {
         return next(new NotFound('Фильм с таким id не найден'));
       }
-      if (!owner) {
+      if (owner !== String(movie.owner)) {
         return next(new Forbidden('Недостаточно прав для удаления'));
       }
       return Movie.remove(movieId)

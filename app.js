@@ -8,7 +8,7 @@ const limiter = require('./utils/rateLimiter');
 const router = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3001, MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
+const { PORT = 3001, MONGO_URL = 'mongodb://localhost:27017/moviesdb' } = process.env;
 
 const app = express();
 
