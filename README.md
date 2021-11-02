@@ -6,4 +6,4 @@
 
 ## Домен сервера
 
-https://movie-radzhabov.nomoredomains.rocks/
+https://api.movie-radzhabov.nomoredomains.rocks/
