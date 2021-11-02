@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const limiter = require('./utils/rateLimiter');
 const router = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const handleErrors = require('./middlewares/errorHandler');
 
 const { PORT = 3001, MONGO_URL = 'mongodb://localhost:27017/moviesdb' } = process.env;
 
@@ -53,16 +54,6 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { message, statusCode = 500 } = err;
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'Произошла ошибка на сервере'
-        : message,
-    });
-  next();
-});
+app.use(handleErrors);
 
 app.listen(PORT, () => PORT);
