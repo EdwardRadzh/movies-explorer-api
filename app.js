@@ -12,6 +12,32 @@ const { PORT = 3001, MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb' } = proc
 
 const app = express();
 
+const allowedCors = [
+  'localhost:3001',
+  'http://localhost:3001',
+  'https://movie-radzhabov.nomoredomains.rocks',
+  'http://movie-radzhabov.nomoredomains.rocks',
+];
+
+// eslint-disable-next-line consistent-return
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  const { method } = req;
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+  const requestHeaders = req.headers['access-control-request-headers'];
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+
+    return res.status(200).send();
+  }
+
+  next();
+});
+
 app.use(requestLogger);
 
 app.use(helmet());
