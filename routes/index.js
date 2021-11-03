@@ -28,8 +28,8 @@ router.post('/signin', celebrate({
 router.use(auth);
 
 // роуты, требующие авторизации
-router.use('/users', usersRouter);
-router.use('/movies', movieRouter);
+router.use('/', usersRouter);
+router.use('/', movieRouter);
 router.use('*', () => {
   throw new NotFound('Запрашиваемый ресурс не найден');
 });
