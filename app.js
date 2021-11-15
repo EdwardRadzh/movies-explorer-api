@@ -9,13 +9,15 @@ const router = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const handleErrors = require('./middlewares/errorHandler');
 
-const { PORT = 3001, MONGO_URL = 'mongodb://localhost:27017/moviesdb' } = process.env;
+const { PORT = 3000, MONGO_URL = 'mongodb://localhost:27017/moviesdb' } = process.env;
 
 const app = express();
 
 const allowedCors = [
   'localhost:3001',
   'http://localhost:3001',
+  'localhost:3000',
+  'http://localhost:3000',
   'https://movie-radzhabov.nomoredomains.rocks',
   'http://movie-radzhabov.nomoredomains.rocks',
 ];
