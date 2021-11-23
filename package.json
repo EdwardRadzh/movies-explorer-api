@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/EdwardRadzh/movies-explorer-api#readme",
   "devDependencies": {
-    "eslint": "^8.1.0",
+    "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.25.2",
     "nodemon": "^2.0.14"
