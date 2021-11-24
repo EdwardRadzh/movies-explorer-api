@@ -45,30 +45,17 @@ const createMovie = (req, res, next) => {
     owner,
   })
     .then((movie) => {
-      res.status(200).send({
-        _id: movie._id,
-        country: movie.country,
-        director: movie.director,
-        duration: movie.duration,
-        year: movie.year,
-        description: movie.description,
-        image: movie.image,
-        trailer: movie.trailer,
-        nameRU: movie.nameRU,
-        nameEN: movie.nameEN,
-        thumbnail: movie.thumbnail,
-        movieId: movie.movieId,
-      });
+      res.status(200).send(movie);
     })
     .catch(next);
 };
 
 //  удаляет сохранённый фильм по id
 const deleteMovie = (req, res, next) => {
-  // const { movieId } = req.params;
+  const { movieId } = req.params;
   const owner = req.user._id;
 
-  Movie.findById(req.params.movieId)
+  Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
         return next(new NotFound('Фильм с таким id не найден'));
@@ -76,7 +63,7 @@ const deleteMovie = (req, res, next) => {
       if (owner !== String(movie.owner)) {
         return next(new Forbidden('Недостаточно прав для удаления'));
       }
-      return Movie.deleteOne(req.params.movieId)
+      return Movie.deleteOne({ movieId })
         .then((userMovie) => res.status(200).send(userMovie));
     })
     .catch((err) => {
