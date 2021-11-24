@@ -63,7 +63,7 @@ const deleteMovie = (req, res, next) => {
       if (owner !== String(movie.owner)) {
         return next(new Forbidden('Недостаточно прав для удаления'));
       }
-      return Movie.findOneAndDelete({ movieId })
+      return Movie.deleteOne({ movie })
         .then(() => res.status(200).send({ message: `'${movie.nameRU}' удалён из личного кабинета` }));
     })
     .catch((err) => {
