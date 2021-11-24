@@ -52,7 +52,7 @@ const createMovie = (req, res, next) => {
 
 //  удаляет сохранённый фильм по id
 const deleteMovie = (req, res, next) => {
-  const { movieId } = req.params._id;
+  const { movieId } = req.params;
   const owner = req.user._id;
 
   Movie.findById(movieId)
