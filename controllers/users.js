@@ -65,9 +65,12 @@ const createUser = (req, res, next) => {
         }
         User.create({ name, email, password: hash })
           .then((user) => {
+            const token = jwt.sign({ _id: user._id }, `${NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret'}`, { expiresIn: '7d' });
             res.status(200).send({
+              _id: user._id,
               name: user.name,
               email: user.email,
+              token,
             });
           });
       });
@@ -89,7 +92,12 @@ const login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       );
-      return res.send({ token });
+      return res.send({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token,
+      });
     })
     .catch(next);
 };
