@@ -1,8 +1,8 @@
 const Movie = require('../models/movie');
 
-const NotFound = require('../errors/NotFound');
+// const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
-const Forbidden = require('../errors/Forbidden');
+// const Forbidden = require('../errors/Forbidden');
 
 //  возвращает все сохранённые пользователем фильмы
 const getMovies = (req, res, next) => {
@@ -52,19 +52,17 @@ const createMovie = (req, res, next) => {
 
 //  удаляет сохранённый фильм по id
 const deleteMovie = (req, res, next) => {
-  const { movieId } = req.params.movieId;
-  const owner = req.user._id;
+  // const { movieId } = req.params.movieId;
+  // const owner = req.user._id;
 
-  Movie.findById(movieId)
+  Movie.findById(req.params.movieId)
     .then((movie) => {
-      if (!movie) {
-        return next(new NotFound('Фильм с таким id не найден'));
+      if (movie.owner._id.toString() === req.user._id) {
+        Movie.findByIdAndRemove(req.params.movieId)
+          .then(() => res.status(200).send({ message: 'Фильм успешно удален' }));
+      } else {
+        throw new Error('AccessError');
       }
-      if (owner !== String(movie.owner)) {
-        return next(new Forbidden('Недостаточно прав для удаления'));
-      }
-      return Movie.deleteOne(movieId)
-        .then(() => res.status(200).send({ message: `'${movie.nameRU}' удалён из личного кабинета` }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
