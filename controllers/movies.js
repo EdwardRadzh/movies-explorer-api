@@ -1,8 +1,8 @@
 const Movie = require('../models/movie');
 
-// const NotFound = require('../errors/NotFound');
+const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
-// const Forbidden = require('../errors/Forbidden');
+const Forbidden = require('../errors/Forbidden');
 
 //  возвращает все сохранённые пользователем фильмы
 const getMovies = (req, res, next) => {
@@ -52,14 +52,11 @@ const createMovie = (req, res, next) => {
 
 //  удаляет сохранённый фильм по id
 const deleteMovie = (req, res, next) => {
-  // const { movieId } = req.params.movieId;
-  // const owner = req.user._id;
-
   Movie.findById(req.params.movieId)
     .then((movie) => {
       if (movie.owner._id.toString() === req.user._id) {
         Movie.findByIdAndRemove(req.params.movieId)
-          .then(() => res.status(200).send({ message: 'Фильм успешно удален' }));
+          .then(() => res.status(200).send({ message: `'${movie.nameRU}' удалён из сохранённых фильмов` }));
       } else {
         throw new Error('AccessError');
       }
@@ -67,6 +64,12 @@ const deleteMovie = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequest('Переданы некорректные данные'));
+      }
+      if (err.message === 'NotFound') {
+        throw new NotFound('Фильм с указанным _id не найден');
+      }
+      if (err.message === 'AccessError') {
+        throw new Forbidden('Вы пытаетесь удалить чужой фильм');
       } else {
         next(err);
       }
